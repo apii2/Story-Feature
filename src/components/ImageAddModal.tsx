@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
+import { PinturaEditor } from "@pqina/react-pintura";
+import { getEditorDefaults } from "@pqina/pintura";
+import imageCompression from "browser-image-compression";
+import "@pqina/pintura/pintura.css";
 
 interface ImageAddModalProps {
   onClose: () => void;
@@ -13,6 +17,7 @@ export default function ImageAddModal({
   const [dragOver, setDragOver] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [saveEdited, setSaveEdited] = useState(true);
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
   const handleFileSelect = (file: File) => {
@@ -56,14 +61,18 @@ export default function ImageAddModal({
     if (file) handleFileSelect(file);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedImage) {
       const reader = new FileReader();
       reader.onload = () => {
         onImageAdd(reader.result as string);
         onClose();
       };
-      reader.readAsDataURL(selectedImage);
+      const compressedFile = await imageCompression(selectedImage, {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1024,
+      });
+      reader.readAsDataURL(compressedFile);
     }
   };
 
@@ -76,7 +85,7 @@ export default function ImageAddModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-xl w-full max-h-[90vh] overflow-hidden">
         {/* Modal Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
@@ -104,15 +113,17 @@ export default function ImageAddModal({
             onDrop={handleDrop}
           >
             {previewUrl ? (
-              <div className="space-y-4">
-                <img
+              <div style={{ height: "60vh" }}>
+                <PinturaEditor
+                  {...getEditorDefaults()}
                   src={previewUrl}
-                  alt="Preview"
-                  className="mx-auto max-h-32 rounded-lg object-cover"
+                  onProcess={(res) => {
+                    setSaveEdited(true);
+                    setSelectedImage(res.dest);
+                  }}
+                  onLoad={() => setSaveEdited(true)}
+                  onUpdate={() => setSaveEdited(false)}
                 />
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {selectedImage?.name}
-                </p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -155,9 +166,9 @@ export default function ImageAddModal({
           </button>
           <button
             onClick={handleSubmit}
-            disabled={!selectedImage}
+            disabled={!selectedImage || !saveEdited}
             className={`px-6 py-2 rounded-lg transition-colors ${
-              selectedImage
+              selectedImage && saveEdited
                 ? "bg-blue-500 hover:bg-blue-600 text-white"
                 : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
             }`}
