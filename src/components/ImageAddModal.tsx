@@ -18,6 +18,7 @@ export default function ImageAddModal({
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const [saveEdited, setSaveEdited] = useState(true);
+  const [processing, setProcessing] = useState(false);
   const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
   const handleFileSelect = (file: File) => {
@@ -29,7 +30,6 @@ export default function ImageAddModal({
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    console.log("Selected file:", file);
 
     if (!file.type.startsWith("image/")) {
       alert("Please select a valid image file.");
@@ -62,17 +62,24 @@ export default function ImageAddModal({
   };
 
   const handleSubmit = async () => {
-    if (selectedImage) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        onImageAdd(reader.result as string);
-        onClose();
-      };
-      const compressedFile = await imageCompression(selectedImage, {
-        maxSizeMB: 0.5,
-        maxWidthOrHeight: 1024,
-      });
-      reader.readAsDataURL(compressedFile);
+    setProcessing(true);
+    try {
+      if (selectedImage) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          onImageAdd(reader.result as string);
+          onClose();
+        };
+        const compressedFile = await imageCompression(selectedImage, {
+          maxSizeMB: 0.5,
+          maxWidthOrHeight: 1024,
+        });
+        reader.readAsDataURL(compressedFile);
+      }
+    } catch (error) {
+      console.error("Error processing image:", error);
+    } finally {
+      setProcessing(false);
     }
   };
 
@@ -160,20 +167,20 @@ export default function ImageAddModal({
         <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
           <button
             onClick={handleClose}
-            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors"
+            className="px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 transition-colors cursor-pointer"
           >
             Cancel
           </button>
           <button
             onClick={handleSubmit}
             disabled={!selectedImage || !saveEdited}
-            className={`px-6 py-2 rounded-lg transition-colors ${
+            className={`px-6 py-2 rounded-lg transition-colors cursor-pointer ${
               selectedImage && saveEdited
                 ? "bg-blue-500 hover:bg-blue-600 text-white"
                 : "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
             }`}
           >
-            Add Image
+            {processing ? "Adding..." : "Add Image"}
           </button>
         </div>
       </div>

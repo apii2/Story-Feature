@@ -1,6 +1,7 @@
-import { Plus } from "lucide-react";
+import { Image } from "lucide-react";
 import { useEffect, useState } from "react";
 import ImageAddModal from "./components/ImageAddModal";
+import ImageSwiper from "./components/ImageSwiper";
 
 export interface Image {
   id: number;
@@ -19,11 +20,14 @@ function App() {
 
   const handleImageAdd = (imageSrc: string) => {
     setImages((prev) => {
-      const updatedImages = [...prev, { 
-        id: prev.length + 1, 
-        url: imageSrc, 
-        datetime: new Date() 
-      }];
+      const updatedImages = [
+        ...prev,
+        {
+          id: prev.length + 1,
+          url: imageSrc,
+          datetime: new Date(),
+        },
+      ];
       localStorage.setItem("storyImages", JSON.stringify(updatedImages));
       return updatedImages;
     });
@@ -35,36 +39,17 @@ function App() {
 
   return (
     <>
-      <div className="w-full lg:max-w-[40%] md:max-w-[60%] max-w-[90%] min-w-75 min-h-screen py-6 mx-auto box-border">
-        <div className="flex gap-5 mb-10 flex-wrap">
-          {/* Add button */}
-          <div
-            onClick={() => setOpenImageAddModal(true)}
-            className="w-20 h-20 flex items-center justify-center rounded-full overflow-hidden border-[3px] border-gray-300 shadow-md transition-all duration-300 cursor-pointer hover:shadow-lg group hover:border-white dark:border-gray-600"
-          >
-            <Plus className="w-4/5 h-4/5 text-gray-500 group-hover:text-white pointer-events-none transition-all duration-300" />
-          </div>
-
-          {/* Display added images */}
-          {images.map((image) => (
-            <button
-              key={image.id}
-              onClick={() => setSelectedImage(image.url)}
-              className="w-20 h-20 rounded-full overflow-hidden border-[3px] border-gray-300 shadow-md transition-all duration-300 cursor-pointer hover:shadow-lg hover:border-gray-400 dark:border-gray-600 dark:hover:border-gray-500"
-            >
-              <img
-                src={image.url}
-                alt={`Story ${image.id}`}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
+      <div className="w-full lg:max-w-[50%] md:max-w-[60%] max-w-[90%] min-w-75 min-h-screen py-8 xl:py-6 mx-auto box-border">
+        {/* Story Images Swiper */}
+        <ImageSwiper
+          images={images}
+          setOpenImageAddModal={setOpenImageAddModal}
+          setSelectedImage={setSelectedImage}
+        />
 
         {/* Display Image */}
         <div className="min-h-[calc(100dvh-11rem)] bg-gray-50 p-7 rounded-xl shadow-lg text-center dark:bg-gray-800">
           {selectedImage ? (
-            // <ImageSwiper imageList={images} />
             <div>
               <img
                 src={selectedImage}
@@ -74,12 +59,12 @@ function App() {
             </div>
           ) : (
             <>
-              <h2 className="text-gray-800 mb-5 text-2xl dark:text-white">
-                Main Content
-              </h2>
-              <p className="text-gray-600 leading-6 text-base dark:text-gray-300">
-                This is your main content area that takes up one-third of the
-                width and is centered on the page.
+              <p className="text-center text-gray-500 dark:text-gray-400 text-sm max-w-md mx-auto leading-relaxed">
+                Click an image above to preview it here, or use the
+                <span className="font-medium text-gray-700 dark:text-gray-200">
+                  {" "}"+"{" "}
+                </span>
+                button to upload new ones.
               </p>
             </>
           )}
