@@ -1,4 +1,4 @@
-import { Image } from "lucide-react";
+import { ArrowLeftCircle, ArrowRightCircle, Image } from "lucide-react";
 import { useEffect, useState } from "react";
 import ImageAddModal from "./components/ImageAddModal";
 import ImageSwiper from "./components/ImageSwiper";
@@ -40,7 +40,7 @@ function App() {
     if (selectedImage) {
       setIsProgressActive(true);
       setProgressPercentage(0);
-      const duration = 3000;
+      const duration = 5000;
       const intervalTime = 50;
 
       const step = 100 / (duration / intervalTime);
@@ -66,11 +66,11 @@ function App() {
     }
   }, [selectedImage]);
 
-  const handleAutoImageChange = () => {
+  const handleAutoImageChange = (flow?: "next" | "prev") => {
     if (images.length > 0) {
       const currentIndex = images.findIndex((img) => img.url === selectedImage);
-      const nextIndex = (currentIndex + 1) % images.length;
-      if (nextIndex < images.length && nextIndex !== 0) {
+      const nextIndex = flow === "prev" ? currentIndex - 1 : currentIndex + 1;
+      if (nextIndex < images.length) {
         setSelectedImage(images[nextIndex].url);
         return;
       }
@@ -108,9 +108,9 @@ function App() {
         />
 
         {/* Display Image */}
-        <div className="min-h-[calc(100dvh-11rem)] bg-gray-50 p-7 rounded-xl shadow-lg text-center dark:bg-gray-800">
+        <div className="min-h-[calc(100dvh-11rem)] bg-gray-50 flex items-center justify-center p-7 rounded-xl shadow-lg text-center dark:bg-gray-800">
           {selectedImage ? (
-            <div className="relative">
+            <div className="relative w-full">
               {/* Progress Bar */}
               {isProgressActive && (
                 <div className="absolute top-2 left-0 right-0 mx-auto rounded-full w-[96%] h-1.5 bg-gray-100 shadow-lg">
@@ -126,6 +126,27 @@ function App() {
                 alt="Selected Story"
                 className="mx-auto w-full h-full rounded-lg"
               />
+
+              {/* Navigation Buttons */}
+              <button
+                disabled={
+                  images.findIndex((img) => img.url === selectedImage) ===
+                  images.length - 1
+                }
+                onClick={() => handleAutoImageChange("next")}
+                className="block text-gray-400 hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-600 cursor-pointer transition-all absolute right-[30%] sm:right-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-right-24 transform md:-translate-y-1/2"
+              >
+                <ArrowRightCircle className="w-12 h-12" />
+              </button>
+              <button
+                disabled={
+                  images.findIndex((img) => img.url === selectedImage) === 0
+                }
+                onClick={() => handleAutoImageChange("prev")}
+                className="block text-gray-400 hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-600 cursor-pointer transition-all absolute left-[30%] sm:left-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-left-24 transform md:-translate-y-1/2"
+              >
+                <ArrowLeftCircle className="w-12 h-12" />
+              </button>
             </div>
           ) : (
             <>
