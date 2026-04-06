@@ -37,9 +37,9 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
       <SwiperSlide>
         <div
           onClick={() => setOpenImageAddModal(true)}
-          className="w-20 h-20 xl:w-25 xl:h-25 xs:w-18 xs:h-18 flex items-center justify-center rounded-full overflow-hidden border-[3px] border-gray-300 shadow-md transition-all duration-300 cursor-pointer hover:shadow-lg group hover:border-white dark:border-gray-600"
+          className="w-20 h-20 xl:w-25 xl:h-25 xs:w-18 xs:h-18 flex items-center justify-center rounded-full overflow-hidden border-[3px] shadow-md transition-all duration-300 cursor-pointer hover:shadow-lg group hover:border-gray-800 hover:dark:border-white border-gray-600"
         >
-          <Plus className="w-4/5 h-4/5 text-gray-500 group-hover:text-white pointer-events-none transition-all duration-300" />
+          <Plus className="w-4/5 h-4/5 text-gray-600 group-hover:dark:text-white group-hover:text-gray-800 pointer-events-none transition-all duration-300" />
         </div>
       </SwiperSlide>
 
@@ -59,11 +59,11 @@ const ImageSwiper: React.FC<ImageSwiperProps> = ({
         </SwiperSlide>
       ))}
 
-      <div className="swiper-button-next text-black! dark:text-gray-100! right-0!">
-        <CircleChevronRight className="fill-black! w-8! h-8!" />
+      <div className="swiper-button-next text-gray-800! right-0!">
+        <CircleChevronRight className="fill-gray-300! w-8! h-8!" />
       </div>
-      <div className="swiper-button-prev text-black! dark:text-gray-100! left-0!">
-        <CircleChevronLeft className="fill-black! w-8! h-8!" />
+      <div className="swiper-button-prev text-gray-800! left-0!">
+        <CircleChevronLeft className="fill-gray-300! w-8! h-8!" />
       </div>
     </Swiper>
   );

@@ -108,7 +108,7 @@ function App() {
         />
 
         {/* Display Image */}
-        <div className="min-h-[calc(100dvh-11rem)] bg-gray-50 flex items-center justify-center p-7 rounded-xl shadow-lg text-center dark:bg-gray-800">
+        <div className="min-h-[calc(100dvh-11rem)] bg-gray-300 flex items-center justify-center p-7 rounded-xl shadow-lg text-center dark:bg-gray-800">
           {selectedImage ? (
             <div className="relative w-full">
               {/* Progress Bar */}
@@ -134,7 +134,7 @@ function App() {
                   images.length - 1
                 }
                 onClick={() => handleAutoImageChange("next")}
-                className="block text-gray-400 hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-600 cursor-pointer transition-all absolute right-[30%] sm:right-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-right-24 transform md:-translate-y-1/2"
+                className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-600 cursor-pointer transition-all absolute right-[30%] sm:right-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-right-24 transform md:-translate-y-1/2"
               >
                 <ArrowRightCircle className="w-12 h-12" />
               </button>
@@ -143,7 +143,7 @@ function App() {
                   images.findIndex((img) => img.url === selectedImage) === 0
                 }
                 onClick={() => handleAutoImageChange("prev")}
-                className="block text-gray-400 hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-600 cursor-pointer transition-all absolute left-[30%] sm:left-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-left-24 transform md:-translate-y-1/2"
+                className="block text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 disabled:cursor-not-allowed disabled:text-gray-400 dark:disabled:text-gray-600 cursor-pointer transition-all absolute left-[30%] sm:left-[40%] -bottom-15 md:bottom-auto md:top-1/2 md:-left-24 transform md:-translate-y-1/2"
               >
                 <ArrowLeftCircle className="w-12 h-12" />
               </button>
