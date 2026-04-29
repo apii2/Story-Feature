@@ -1,18 +1,43 @@
 @import "tailwindcss";
 
-:root{
-    --color-primary: white;
+:root {
+  --color-primary: white;
 }
 
-:root.dark{
-    --color-primary: black;
+:root.dark {
+  --color-primary: black;
 }
 
-body{
-    background-color: var(--color-primary);
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+body {
+  background-color: var(--color-primary);
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+}
+
+/* Swiper navigation buttons */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 0;
+  z-index: 20;
+  bottom: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 16px;
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
 }
